@@ -44,7 +44,20 @@
                 });
             });
 
-            function initAdserver() {
+            function initAdserver(bids) {
+                for (var i in bids) {
+                    for (var j in bids[i].bids) {
+                        var bid = bids[i].bids[j];
+                        if (bid.width == 1800 && bid.height == 1000) {
+                            bid.width = 728;
+                            bid.height = 90;
+                        } else if (bid.width == 970 && bid.height == 1000) {
+                            bid.width = 970;
+                            bid.height = 250;
+                        }
+                    }
+                }                
+             
                 if (pbjs.initAdserverSet) return;
                 pbjs.initAdserverSet = true;
                 googletag.cmd.push(function() {
@@ -52,7 +65,7 @@
                     googletag.pubads().refresh();
                 });
             }
-            
+            var initAdserver = function(bids) {
             // in case PBJS doesn't load
             setTimeout(function() {
                 initAdserver();
