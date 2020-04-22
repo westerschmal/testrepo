@@ -1,0 +1,31 @@
+<script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="e89790c8-8f7f-4516-af7c-6f5c79376948" type="text/javascript"></script>
+<script type="text/plain" data-cookieconsent="necessary" src='https://www.googletagservices.com/tag/js/gpt.js' async></script>
+<script type="text/javascript" src="/scripts/advertising/advertising.js?v=2"></script>
+<script type="text/javascript">
+	function CookiebotCallback_OnDecline() {
+	    //Cookiebot.getScript('https://www.googletagservices.com/tag/js/gpt.js', false); //, doTextBlocks
+	    Cookiebot.runScripts();
+	    doTextBlocks();
+	}
+
+	function CookiebotCallback_OnAccept() {
+	    // Fix googleTag undefined issue; force loading gpt first
+	    //Cookiebot.getScript('https://www.googletagservices.com/tag/js/gpt.js', false); //, doTextBlocks				
+	    //if (Cookiebot.consent.marketing) {}
+	    // toggle text/plain scripts accordingly
+	    Cookiebot.runScripts();
+	    doTextBlocks();
+	}
+
+	function doTextBlocks() {
+	    // Nieuwsbrief trigger 
+	    if ($(window).width() > 1024) {
+	        Cookiebot.getScript('https://my.hellobar.com/1641c1975b176aef13b9f5fd1181aeb4bc2749f6.js', false);
+	    }
+	}
+
+	function CookiebotCallback_OnTagsExecuted() {
+	    //alert('OnTagsExecuted');
+
+	}
+</script>
