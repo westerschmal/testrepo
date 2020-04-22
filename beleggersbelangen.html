@@ -1,7 +1,16 @@
-<script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="e89790c8-8f7f-4516-af7c-6f5c79376948" type="text/javascript"></script>
-<script type="text/plain" data-cookieconsent="necessary" src='https://www.googletagservices.com/tag/js/gpt.js' async></script>
-<script type="text/javascript" src="/scripts/advertising/advertising.js?v=2"></script>
+<script id="Cookiebot" data-framework="IAB" src="https://consent.cookiebot.com/uc.js" data-cbid="e89790c8-8f7f-4516-af7c-6f5c79376948" type="text/javascript"></script>
+<script async src="https://pool-newskoolmedia.adhese.com/tag/prebid.js"></script>
+<script src="https://pool-newskoolmedia.adhese.com/tag/config.js"></script>
+<script type="text/javascript" src='https://www.googletagservices.com/tag/js/gpt.js' async></script>
 <script type="text/javascript">
+	var googletag = googletag || {};
+	googletag.cmd = googletag.cmd || [];
+	googletag.cmd.push(function() {
+	    googletag.pubads().disableInitialLoad();
+	});
+	</script>
+	<script type="text/javascript" src="/scripts/advertising/advertising.js?v=2"></script>
+	<script type="text/javascript">
 	function CookiebotCallback_OnDecline() {
 	    //Cookiebot.getScript('https://www.googletagservices.com/tag/js/gpt.js', false); //, doTextBlocks
 	    Cookiebot.runScripts();
