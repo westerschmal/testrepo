@@ -24,9 +24,10 @@ export const spec = {
     const targets = validBidRequests.map(bid => bid.params.data).reduce(mergeTargets, {});
     const gdprParams = (gdprConsent && gdprConsent.consentString) ? [`xt${gdprConsent.consentString}`] : [];
     const refererParams = (refererInfo && refererInfo.referer) ? [`xf${base64urlEncode(refererInfo.referer)}`] : [];
+    const id5Params = (getId5Id(validBidRequests)) ? [`x5${getId5Id(validBidRequests)}`] : [];
     const targetsParams = Object.keys(targets).map(targetCode => targetCode + targets[targetCode].join(';'));
     const slotsParams = validBidRequests.map(bid => 'sl' + bidToSlotName(bid));
-    const params = [...slotsParams, ...targetsParams, ...gdprParams, ...refererParams].map(s => `/${s}`).join('');
+    const params = [...slotsParams, ...targetsParams, ...gdprParams, ...refererParams, ...id5Params].map(s => `/${s}`).join('');
     const cacheBuster = '?t=' + new Date().getTime();
     const uri = 'https://ads-' + account + '.adhese.com/json' + params + cacheBuster;
 
@@ -80,14 +81,12 @@ function adResponse(bid, ad) {
     mediaType: getMediaType(markup),
     cpm: Number(price.amount),
     currency: price.currency,
-    width: Number(ad.width),
-    height: Number(ad.height),
+    width: (ad.width?Number(ad.width):Number(ad.adType.split('x')[0])),
+    height: (ad.height?Number(ad.height):Number(ad.adType.split('x')[1])),
     creativeId: adDetails.creativeId,
     dealId: adDetails.dealId,
     adhese: {
-      originData: adDetails.originData,
-      origin: adDetails.origin,
-      originInstance: adDetails.originInstance
+      originData: adDetails.originData
     }
   });
 
@@ -136,6 +135,12 @@ function getAccount(validBidRequests) {
   return validBidRequests[0].params.account;
 }
 
+function getId5Id(validBidRequests) {
+  if(validBidRequests[0] && validBidRequests[0].userId && validBidRequests[0].userId.id5id) {
+    return validBidRequests[0].userId.id5id;  
+  }
+}
+
 function getbaseAdResponse(response) {
   return Object.assign({ netRevenue: true, ttl: 360 }, response);
 }
@@ -151,9 +156,9 @@ function getMediaType(markup) {
 
 function getAdMarkup(ad) {
   if (!isAdheseAd(ad) || (ad.ext === 'js' && ad.body !== undefined && ad.body !== '' && ad.body.match(/<script|<SCRIPT|<html|<HTML|<\?xml/))) {
-    return ad.body
+    return ad.body.replace("[publisher_win_price]",getPrice(ad).amount);
   } else {
-    return ad.tag;
+    return ad.tag.replace("[publisher_win_price]",getPrice(ad).amount);
   }
 }
 
@@ -168,21 +173,15 @@ function getAdDetails(ad) {
   let creativeId = '';
   let dealId = '';
   let originData = {};
-  let origin = '';
-  let originInstance = '';
 
   if (isAdheseAd(ad)) {
     creativeId = ad.id;
     dealId = ad.orderId;
-    originData = { priority: ad.priority, orderProperty: ad.orderProperty, adFormat: ad.adFormat, adType: ad.adType, libId: ad.libId, adspaceId: ad.adspaceId, viewableImpressionCounter: ad.viewableImpressionCounter, slotId: ad.slotID, slotName: ad.slotName, advertiserId: ad.advertiserId, adId: ad.id };
+    originData = { priority: ad.priority, orderProperty: ad.orderProperty, adFormat: ad.adFormat, adType: ad.adType, libId: ad.libId, adspaceId: ad.adspaceId, viewableImpressionCounter: ad.viewableImpressionCounter };
   } else {
     creativeId = ad.origin + (ad.originInstance ? '-' + ad.originInstance : '');
     if (ad.originData) {
       originData = ad.originData;
-      originData.slotId = ad.slotID;
-      originData.slotName = ad.slotName;
-      originData.adType = ad.adType;
-      if (ad.adFormat) originData.adFormat = ad.adFormat;
       if (ad.originData.seatbid && ad.originData.seatbid.length) {
         const seatbid = ad.originData.seatbid[0];
         if (seatbid.bid && seatbid.bid.length) {
@@ -192,14 +191,8 @@ function getAdDetails(ad) {
         }
       }
     }
-    if (ad.originInstance) {
-      originInstance = ad.originInstance;
-    }
-    if (ad.origin) {
-      origin = ad.origin;
-    }
   }
-  return { creativeId: creativeId, dealId: dealId, originData: originData, origin: origin, originInstance: originInstance };
+  return { creativeId: creativeId, dealId: dealId, originData: originData };
 }
 
 function base64urlEncode(s) {
