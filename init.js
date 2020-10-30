@@ -1,3 +1,20 @@
+(function() {
+  var scrpt = document.createElement('script');
+  scrpt.async = false;
+  scrpt.type = 'text/javascript';
+  scrpt.src = 'https://pool-demo.adhese.com/tag/adspreeconfig.js';
+  var node = document.getElementsByTagName('script')[0];
+  node.parentNode.insertBefore(scrpt, node);
+})();
+
+var googletag = googletag || {};
+googletag.cmd = googletag.cmd || [];
+googletag.cmd.push(function () {
+    googletag.pubads().disableInitialLoad();
+});
+
+
+
 (function ($) {
 
   'use strict';
