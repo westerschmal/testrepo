@@ -1,0 +1,72 @@
+<!--
+---- Bannerflow ----
+
+This ad has been created in and exported from the Bannerflow platform.
+
+Content information:
+• Exported at: Wednesday, 12 January 2022 13:00:27 (UTC)
+• ID: ef997054-361d-41eb-b7c5-0cade42d00ec-61ded0de7525f94c4983cd2e
+
+Read more about browser compability at:
+https://support.bannerflow.com/en/articles/1029835-which-browsers-does-bannerflow-banners-work-in
+
+For further information and contact, please see:
+http://www.bannerflow.com
+
+--------------------
+-->
+<!DOCTYPE html>
+<html lang="nl"">
+<head>
+    <title>300x250 nl</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="ad.size" content="width=300,height=250" />
+    <style type="text/css">
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+
+        body {
+            overflow: hidden;
+        }
+    </style>
+    <script type="text/javascript">
+		var clickTag = 'https://fairplaycasino.nl/';
+		var AdScript = (function() {
+
+	            function AdScript(ad) {}
+
+	     		AdScript.prototype.overrideRedirect = function(redirect, targetUrl, adInfo) {
+		     		var applyDeeplink = document.querySelector("script[data-deeplink]").getAttribute('data-deeplink') === 'true';
+		     		if (!applyDeeplink) {
+		     			if (clickTag) {
+							window.open(clickTag, '_blank');	
+						}
+		     		}
+		     		else {
+	                	redirect.parse(clickTag);
+	                	if (targetUrl) {
+	                   		redirect.getFinalRedirect().setDeeplink(targetUrl, ['*'], 'mergetargetprimary');
+	                	}
+	                	window.open(redirect.toString(), '_blank');
+			     		
+	               	}
+               		redirect.prevent = true;
+                	return redirect;
+            	};
+
+            	return AdScript;
+	        }());
+			window._bannerflow = window._bannerflow || {};
+			window._bannerflow.adScripts = window._bannerflow.adScripts || [];
+			window._bannerflow.adScripts.push(AdScript);
+    </script>
+</head>
+<body>
+    <script data-deeplink="true" src="ad.js?redirecturl="></script>
+</body>
+</html>
