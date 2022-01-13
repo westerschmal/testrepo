@@ -16,7 +16,7 @@ http://www.bannerflow.com
 --------------------
 -->
 <!DOCTYPE html>
-<html lang="nl"">
+<html lang="nl">
 <head>
     <title>300x250 nl</title>
     <meta charset="UTF-8" />
@@ -35,7 +35,35 @@ http://www.bannerflow.com
         }
     </style>
     <script type="text/javascript">
-		var clickTag = 'https://fairplaycasino.nl/';
+		var clickTag = '';
+
+		function getDomain (iframeSource) {
+			var urlEncoded = iframeSource.split('/xf');
+			if (urlEncoded.length > 1) {
+				var b64url = urlEncoded[1].split('/')[0];
+				return atob(b64url);
+			} else {
+				return;
+			}
+		};
+
+		function sanitizeDomain(url) {
+			try {
+				domain = url.replace("www.", "").replace("http://", "").replace("https://", "").split("/")[0];
+				return domain;
+			} catch (e) {
+				return "unknown"
+			}
+		};
+
+		function replaceUTMDomain () {
+			clickTag = clickTag.replace("${DOMAIN_PLACEHOLDER}", sanitizeDomain(getDomain(window.location.href)));
+		}
+
+		if (clickTag.includes("${DOMAIN_PLACEHOLDER}")) {
+			replaceUTMDomain();
+		};
+
 		var AdScript = (function() {
 
 	            function AdScript(ad) {}
@@ -67,6 +95,6 @@ http://www.bannerflow.com
     </script>
 </head>
 <body>
-    <script data-deeplink="true" src="ad.js?redirecturl="></script>
+    <script data-deeplink="false" src="ad.js?redirecturl="></script>
 </body>
 </html>
